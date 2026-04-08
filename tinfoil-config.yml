@@ -1,0 +1,41 @@
+cvm-version: 0.7.3
+cpus: 32
+gpus: 8
+memory: 524288
+
+models:
+  - name: "glm-5.1-fp8"
+    repo: "zai-org/GLM-5.1-FP8@28d85cc22ceeee52340e6ec3399bda31852b117c"
+    mpk: "REPLACE_WITH_MODELPACK_HASH"
+
+containers:
+  - name: "glm-5.1-fp8"
+    image: "vllm/vllm-openai:glm51-cu130@sha256:f17a0d64023227305acb47a26edebb52c43e683817ffcac4cca4e6bb7a83692a"
+    runtime: nvidia
+    gpus: all
+    ipc: host
+    command: [
+      "--model", "/tinfoil/mpk/mpk-REPLACE_WITH_MODELPACK_SHA256",
+      "--tensor-parallel-size", "8",
+      "--speculative-config.method", "mtp",
+      "--speculative-config.num_speculative_tokens", "3",
+      "--tool-call-parser", "glm47",
+      "--reasoning-parser", "glm45",
+      "--enable-auto-tool-choice",
+      "--served-model-name", "glm-5.1-fp8",
+      "--port", "8001"
+    ]
+
+shim:
+  upstream-port: 8001
+  authenticated: true
+  authenticated-endpoints:
+    - /v1/chat/completions
+    - /v1/models
+    - /v1/responses
+  paths:
+    - /v1/chat/completions
+    - /v1/models
+    - /v1/responses
+    - /metrics
+    - /health
