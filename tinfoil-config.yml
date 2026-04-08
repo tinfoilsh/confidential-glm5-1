@@ -1,30 +1,33 @@
-cvm-version: 0.7.3
+cvm-version: 0.7.5
 cpus: 32
 gpus: 8
 memory: 524288
 
 models:
-  - name: "glm-5.1-fp8"
+  - name: "glm-5-1"
     repo: "zai-org/GLM-5.1-FP8@28d85cc22ceeee52340e6ec3399bda31852b117c"
-    mpk: "REPLACE_WITH_MODELPACK_HASH"
+    mpk: "25eab2f93549835776d59f6a15bc108162f93057d6fad6d99defb3186b81b302_756209401856_b3a0fe74-ba3f-5a74-a23d-35765f78ae2b"
 
 containers:
-  - name: "glm-5.1-fp8"
+  - name: "glm-5-1"
     image: "vllm/vllm-openai:glm51-cu130@sha256:f17a0d64023227305acb47a26edebb52c43e683817ffcac4cca4e6bb7a83692a"
     runtime: nvidia
     gpus: all
     ipc: host
     command: [
-      "--model", "/tinfoil/mpk/mpk-REPLACE_WITH_MODELPACK_SHA256",
+      "--model", "/tinfoil/mpk/mpk-25eab2f93549835776d59f6a15bc108162f93057d6fad6d99defb3186b81b302",
       "--tensor-parallel-size", "8",
-      "--speculative-config.method", "mtp",
-      "--speculative-config.num_speculative_tokens", "3",
       "--tool-call-parser", "glm47",
       "--reasoning-parser", "glm45",
       "--enable-auto-tool-choice",
-      "--served-model-name", "glm-5.1-fp8",
+      "--served-model-name", "glm-5-1",
       "--port", "8001"
     ]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 30m
 
 shim:
   upstream-port: 8001
