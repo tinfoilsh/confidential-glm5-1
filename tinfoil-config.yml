@@ -6,23 +6,32 @@ memory: 524288
 models:
   - name: "glm-5-1"
     repo: "zai-org/GLM-5.1-FP8@28d85cc22ceeee52340e6ec3399bda31852b117c"
-    mpk: "25eab2f93549835776d59f6a15bc108162f93057d6fad6d99defb3186b81b302_756209401856_b3a0fe74-ba3f-5a74-a23d-35765f78ae2b"
+    mpk: "fd70ffcf2c2ca3954546b3105150414bcba35838a6ee1a06c283887ad35287ab_756209401856_e085e6ab-593d-5f80-87e7-4a54100774cb"
 
 containers:
   - name: "glm-5-1"
-    image: "vllm/vllm-openai:glm51-cu130@sha256:f17a0d64023227305acb47a26edebb52c43e683817ffcac4cca4e6bb7a83692a"
+    image: "vllm/vllm-openai:glm51-cu130@sha256:bdc161fa9c43539656211239260c193f72c165aeaaba8d1383dba98cef99a86f"
     runtime: nvidia
     gpus: all
     ipc: host
+    restart: always
     command: [
-      "--model", "/tinfoil/mpk/mpk-25eab2f93549835776d59f6a15bc108162f93057d6fad6d99defb3186b81b302",
+      "--model", "/tinfoil/mpk/mpk-fd70ffcf2c2ca3954546b3105150414bcba35838a6ee1a06c283887ad35287ab",
       "--tensor-parallel-size", "8",
+      "--speculative-config.method", "mtp",
+      "--speculative-config.num_speculative_tokens", "3",
       "--tool-call-parser", "glm47",
       "--reasoning-parser", "glm45",
       "--enable-auto-tool-choice",
+      "--chat-template-content-format=string",
       "--served-model-name", "glm-5-1",
       "--port", "8001"
     ]
+    healthcheck:
+      test: ["CMD", "curl", "-sf", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 5s
+      start_period: 60m
 
 shim:
   upstream-port: 8001
