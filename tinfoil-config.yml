@@ -31,7 +31,7 @@ containers:
       test: ["CMD", "curl", "-sf", "http://localhost:8001/health"]
       interval: 30s
       timeout: 5s
-      start_period: 60m
+      start_period: 90m
 
 shim:
   upstream-port: 8001
