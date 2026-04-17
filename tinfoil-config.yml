@@ -5,7 +5,7 @@ memory: 524288
 
 models:
   - name: "glm-5-1"
-    repo: "zai-org/GLM-5.1-FP8@28d85cc22ceeee52340e6ec3399bda31852b117c"
+    repo: "zai-org/GLM-5.1-FP8@f396cf805182f4ca10fa675e1a99815b3ca384db"
     mpk: "fd70ffcf2c2ca3954546b3105150414bcba35838a6ee1a06c283887ad35287ab_756209401856_e085e6ab-593d-5f80-87e7-4a54100774cb"
 
 containers:
