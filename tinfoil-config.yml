@@ -10,7 +10,7 @@ models:
 
 containers:
   - name: "glm-5-1"
-    image: "vllm/vllm-openai:glm51-cu130@sha256:bdc161fa9c43539656211239260c193f72c165aeaaba8d1383dba98cef99a86f"
+    image: "vllm/vllm-openai:v0.20.0-cu130-ubuntu2404@sha256:aff65d7198dd284c37dd0a18a606544cc5e92bfb0d5eb608b77e8b8f1c6b8b0d"
     runtime: nvidia
     gpus: all
     ipc: host
